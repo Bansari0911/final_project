@@ -6,10 +6,10 @@
 
 <h5>Select a file with customers for Database insert.</h5>
 
-<form action="/import" method="post">
+<form>
   <div class="form-horizontal">
     <div class="mb-3">
-      <input class="form-control" type="file" id="formFile" />
+      <input class="form-control" name="filename" type="file" id="formFile" required/>
     </div>
 
     <div class="form-group row">
@@ -24,5 +24,43 @@
     </div>
   </div>
 </form>
+
+<h3 id="waiting"></h3>
+<div id="result"></div>
+
+
+<script>
+  document.querySelector("form").addEventListener("submit", e => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const waiting = document.getElementById('waiting');
+      waiting.appendChild(document.createTextNode('Wait for results'));
+      fetch("/import", {
+        method: "POST",
+        body: formData
+      })
+        .then(response => response.json())
+        .then(data => {
+          waiting.textContent = '';
+          const result = document.getElementById('result');
+          let html = `
+            <h3>Import Summary</h3>
+            <h5>Records Processed: ${data.processed}</h5>
+            <h5>Records inserted successfully: ${data.succeed}</h5>
+            <h5>Records not inserted: ${data.failed}</h5>
+          `;
+           if (data.errors.length) {
+             html = html + `<h5>Errors</h5>`;
+             data.errors.forEach(err => {
+               html = html + `<p>${err}</p>`
+             });
+           }
+           result.innerHTML = html;
+        })
+        .catch(err => {
+            document.getElementById("message").textContent = `Error: ${err.message}`;
+        });
+    });
+</script>
 
 <%- include("_footer") -%>

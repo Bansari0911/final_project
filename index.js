@@ -1,6 +1,8 @@
 const express = require("express");
 const path = require("path");
 const { Pool } = require("pg");
+const multer = require('multer');
+const upload = multer();
 require("dotenv").config();
 
 const app = express();
@@ -212,6 +214,40 @@ app.get("/import", (req, res) => {
   });
 });
 
+app.post('/import', upload.single('filename'), async (req, res) => {
+  if (!req.file || Object.keys(req.file).length === 0) {
+    message = "Error: Import file not uploaded";
+    return res.send(message);
+	}
+	
+	const buffer = req.file.buffer;
+	const lines = buffer.toString().split(/\r?\n/);
+	const success = [];
+	const errors = [];
+
+	for (let line of lines) {
+		const customer = line.split(',');
+		const sql = `
+			INSERT INTO customer
+			(cusid, cusfname, cuslname, cusstate, cussalesytd, cussalesprev)
+			VALUES (${customer[0]}, '${customer[1]}', '${customer[2]}', '${customer[3]}', ${customer[4]}, ${customer[5]})`;
+
+			try {
+				const result = await pool.query(sql);
+				success.push(`Inserted successfully`);
+			} catch(error) {
+				errors.push(`Customer ID: ${customer[0]} - ${error.message}`);
+			}
+	}
+
+  res.status(200).json({
+		processed: lines.length,
+		succeed: success.length,
+		failed: errors.length,
+		errors: errors
+	});
+});
+
 app.get("/export", (req, res) => {
   const model = {
     totalRecords: 0,
@@ -222,6 +258,23 @@ app.get("/export", (req, res) => {
     res.render("export", { model: model });
   });
 });
+
+app.post('/export', (req,res) => {
+	const fileName = req.body.fileName;
+	const sql = `SELECT * FROM customer ORDER BY cusid`;
+
+	pool.query(sql, (err, data) => {
+		if (!err) {
+			let output = '';
+			data.rows.forEach(c => {
+				output += `${c.cusid},${c.cusfname},${c.cuslname},${c.cusstate},${c.cussalesytd},${c.cussalesprev}\r\n`;
+			});
+			res.header("Content-Type", "text/csv");
+			res.attachment(fileName);
+			return res.send(output);
+		}
+	})
+})
 
 const port = process.env.PORT || 3000;
 
