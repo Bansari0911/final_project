@@ -1,0 +1,94 @@
+<%- include("_header") -%>
+
+<h3>Update Customer</h3>
+
+<form action="/edit/<%= model.editor.cusid %>" method="post">
+  <div class="form-horizontal">
+    <div class="form-group row">
+      <label class="col-form-label col-sm-3" for="cusid">ID</label>
+      <div class="col-sm-6">
+        <input
+          disabled
+          type="number"
+          class="form-control"
+          name="cusid"
+          value="<%= model.editor.cusid %>"
+        />
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label class="col-form-label col-sm-3" for="cusfname">First Name</label>
+      <div class="col-sm-6">
+        <input
+          class="form-control"
+          name="cusfname"
+          value="<%= model.editor.cusfname %>"
+        />
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label class="col-form-label col-sm-3" for="cuslname">Last Name</label>
+      <div class="col-sm-6">
+        <input
+          class="form-control"
+          name="cuslname"
+          value="<%= model.editor.cuslname %>"
+        />
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label class="col-form-label col-sm-3" for="cusstate">State</label>
+      <div class="col-sm-6">
+        <input
+          class="form-control"
+          name="cusstate"
+          value="<%= model.editor.cusstate %>"
+          maxlength="2"
+        />
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label class="col-form-label col-sm-3" for="cussalesytd">Sales YTD</label>
+      <div class="col-sm-6">
+        <input
+          type="number"
+          class="form-control"
+          name="cussalesytd"
+          value="<%= model.editor.cussalesytd %>"
+        />
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label class="col-form-label col-sm-3" for="cussalesprev"
+        >Previous Years Sales</label
+      >
+      <div class="col-sm-6">
+        <input
+          type="number"
+          class="form-control"
+          name="cussalesprev"
+          value="<%= model.editor.cussalesprev %>"
+        />
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label class="col-form-label col-sm-2"></label>
+      <div class="col-sm-10">
+        <input type="submit" value="Update Customer" class="btn btn-default btn-warning" />
+      </div>
+    </div>
+  </div>
+</form>
+
+<% if (model.isSuccess) { %>
+  <h2>Customer Updated Successfully!</h2>
+<% } %>
+
+
+<%- include("_footer") -%>

@@ -1,0 +1,52 @@
+<%- include("_header") -%>
+
+<h2>Reports</h2>
+
+<form action="/reports" method="post">
+  <div class="form-horizontal">
+    <div class="form-group row">
+      <label class="form-label col-md-12" for="report_type">Select Report</label>
+			<select class="form-control col-md-12" name="report_type">
+				<option value="normal_lastname">All Customers - Sorted by Customer Last Name, First Name</option>
+				<option value="total_sales_decreasing">All Customers - Sorted by Current Total Sales Decreasing</option>
+				<option value="random_customers">Three Random Customers - Promotional Giveaway (Not Repeating)</option>
+			</select>
+    </div>
+
+    <div class="form-group row">
+      <label class="form-label col-md-12"></label>
+      <input type="submit" value="Run Report" class="btn btn-default btn-primary" />
+    </div>
+  </div>
+</form>
+
+<% if (model.customers.length) { %>
+<div class="table-responsive-sm">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>First Name</th>
+				<th>Last Name</th>
+				<th>State</th>
+				<th>Sales YTD</th>
+				<th>Prev Years Sales</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for (const customer of model.customers) { %>
+      <tr>
+        <td><%= customer.cusid %></td>
+        <td><%= customer.cusfname %></td>
+				<td><%= customer.cuslname %></td>
+				<td><%= customer.cusstate %></td>
+				<td><%= customer.cussalesytd %></td>
+				<td><%= customer.cussalesprev %></td>
+      </tr>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+<% } %>
+
+<%- include("_footer") -%>
