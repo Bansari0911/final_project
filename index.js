@@ -1,15 +1,15 @@
 const express = require("express");
 const path = require("path");
 const { Pool } = require("pg");
+require("dotenv").config();
 
 const app = express();
 
 const pool = new Pool({
-  connectionString:
-		"postgres://nixksbjksckxgl:446b328ed0577d1cde4ab47d8dea163dd0ac9c0cbcb2472ee4ea052212198777@ec2-54-162-207-150.compute-1.amazonaws.com:5432/d3k4b3ktf3ua7f",
-		ssl: {
-			rejectUnauthorized: false
-		}
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
 app.set("view engine", "ejs");
