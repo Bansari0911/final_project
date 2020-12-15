@@ -4,7 +4,13 @@ const { Pool } = require("pg");
 
 const app = express();
 
-const pool = new Pool();
+const pool = new Pool({
+  user: "nixksbjksckxgl",
+  host: "ec2-54-162-207-150.compute-1.amazonaws.com",
+  database: "d3k4b3ktf3ua7f",
+  password: "446b328ed0577d1cde4ab47d8dea163dd0ac9c0cbcb2472ee4ea052212198777",
+  port: 5432,
+});
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
