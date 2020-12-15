@@ -4,13 +4,7 @@ const { Pool } = require("pg");
 
 const app = express();
 
-const pool = new Pool({
-  user: "postgres",
-  host: "localhost",
-  database: "bansarikathrotia",
-  password: "Heroku@911",
-  port: 5432,
-});
+const pool = new Pool();
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
